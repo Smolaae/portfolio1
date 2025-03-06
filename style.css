@@ -1,0 +1,33 @@
+.hidden-navbar {
+  transform: translateY(-100%); /* Cache la navbar en la déplaçant vers le haut */
+  transition: transform 0.3s ease-in-out; /* Ajoute une transition fluide */
+}
+
+/* Animation d'apparition */
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Classe pour appliquer l'animation */
+.fade-in-up {
+  animation: fadeInUp 1s ease-out forwards;
+  opacity: 0; /* Commence invisible */
+}
+
+/* Classe pour déclencher l'animation */
+.visible {
+  opacity: 1;
+}
+
+/* Cache la navbar lors du défilement */
+.hidden-navbar {
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-in-out;
+}
