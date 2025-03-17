@@ -8,12 +8,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         .hidden-navbar {
-            transform: translateY(-100%); /* Cache la navbar */
-            transition: transform 0.3s ease-in-out; /* Transition fluide */
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
         }
     </style>
 
@@ -22,55 +31,69 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        tan: ['Libre Baskerville', 'serif'],  // Utilisation de la police Libre Baskerville
+                        tan: ['Libre Baskerville', 'serif'],
                     },
                     colors: {
                         clifford: '#da373d',
-                        customLight: '##f5f7ff', // Couleur plus claire
-                        customDark: '#7a6d4e',  // Couleur plus foncée
-                        customWhite: '#e0e0d5', // Couleur blanche
+                        customLight: '#f5f7ff',
+                        customDark: '#7a6d4e',
+                        customWhite: '#e0e0d5',
                     }
                 }
-                
             }
         }
     </script>
 </head>
 <body class="bg-black font-tan text-white">
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 p-6 flex justify-between items-center z-50 bg-black/50 backdrop-blur">
+    <nav class="fixed top-0 left-0 right-0 p-4 md:p-6 flex justify-between items-center z-50 bg-black/50 backdrop-blur">
         <div class="text-2xl font-tan">LAE</div>
-        <div class="flex gap-6 text-sm">
+        
+        <!-- Desktop Menu -->
+        <div class="hidden md:flex gap-6 text-sm">
             <a href="#about" class="hover:text-gray-300">ABOUT</a>
             <a href="#work" class="hover:text-gray-300">WORK</a>
             <a href="#other" class="hover:text-gray-300">OTHER</a>
             <a href="#contact" class="hover:text-gray-300">CONTACT</a>
         </div>
+        
+        <!-- Mobile Menu Button -->
+        <button id="menuBtn" class="md:hidden text-white focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
     </nav>
-
     
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-64 bg-black/90 backdrop-blur z-50 mobile-menu flex flex-col pt-20 px-6">
+        <button id="closeMenuBtn" class="absolute top-6 right-6 text-white">
+            <i class="fas fa-times text-xl"></i>
+        </button>
+        <a href="#about" class="text-white py-4 border-b border-gray-800 hover:text-gray-300" onclick="closeMobileMenu()">ABOUT</a>
+        <a href="#work" class="text-white py-4 border-b border-gray-800 hover:text-gray-300" onclick="closeMobileMenu()">WORK</a>
+        <a href="#other" class="text-white py-4 border-b border-gray-800 hover:text-gray-300" onclick="closeMobileMenu()">OTHER</a>
+        <a href="#contact" class="text-white py-4 hover:text-gray-300" onclick="closeMobileMenu()">CONTACT</a>
+    </div>
 
     <!-- Hero Section -->
-    <!-- <section class="h-screen flex items-center justify-center bg-[url(./assets/img/login.jpg)] bg-cover bg-center bg-no-repeat">
-        <h1 class="text-6xl font-tan z-10">LAEDEV</h1>
-    </section> -->
     <section class="h-screen flex items-center justify-center relative">
         <video autoplay loop muted playsinline class="absolute top-0 left-0 w-full h-full object-cover">
             <source src="./lofi.mp4" type="video/mp4">
         </video>
-        <h1 class="text-6xl font-tan z-10 text-white">LAEDEV</h1>
+        <h1 class="text-4xl md:text-6xl font-tan z-10 text-white">LAEDEV</h1>
     </section>
 
-    <section id="about" class="min-h-screen bg-customWhite p-16">
-        <div class="text-pretty flex justify-between">
-            <!-- Colonne "About Me" en haut à gauche -->
-            <div class="flex-1">
-                <h2 class="text-6xl font-tan text-customDark pl-6">ABOUT ME</h2>
+    <!-- About Section -->
+    <section id="about" class="min-h-screen bg-customWhite p-6 md:p-16">
+        <div class="text-pretty flex flex-col md:flex-row md:justify-between">
+            <!-- "About Me" heading - full width on mobile, left column on desktop -->
+            <div class="w-full md:flex-1 mb-8 md:mb-0">
+                <h2 class="text-4xl md:text-6xl font-tan text-customDark pl-0 md:pl-6">ABOUT ME</h2>
             </div>
-            <!-- Texte en bas à droite -->
-            <div class="flex-1 flex justify-center mt-28 mr-6 text-center"> 
+            
+            <!-- Text content - full width on mobile, right column on desktop -->
+            <div class="w-full md:flex-1 md:flex md:justify-center md:mt-28 md:mr-6 text-left md:text-center"> 
                 <div>
-                    <p class="text-base font-tan text-customDark ">
+                    <p class="text-base font-tan text-customDark mb-4">
                         My name is Laetitia, also known as Lae, and I am an apprentice in payroll management with a passion for innovative digital solutions.
                     </p>
                     <p class="text-base font-tan text-customDark">
@@ -79,22 +102,47 @@
                 </div>
             </div>
         </div>
-        
     </section>
     
-    
     <!-- Work Section -->
-    <section id="work" class="min-h-screen bg-neutral-900 p-12">
+    <section id="work" class="min-h-screen bg-neutral-900 p-6 md:p-12">
         <div class="max-w-6xl mx-auto">
-            <h2 class=" text-5xl font-tan text-customLight mb-12 flex justify-center pt-6 pb-6">WORK</h2>
-            <div class="relative h-[500px]"> <!-- Conteneur relatif pour positionner les cartes -->
+            <h2 class="text-4xl md:text-5xl font-tan text-customLight mb-8 md:mb-12 text-center pt-6 pb-6">WORK</h2>
+            
+            <!-- Mobile layout: stacked cards -->
+            <div class="md:hidden space-y-6">
+                <!-- Card 1 -->
+                <div class="w-full h-64 group overflow-hidden rounded-lg bg-[url(./yllusion2.png)] bg-cover bg-center bg-no-repeat transform transition-transform duration-300 hover:scale-105">
+                    <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div class="text-white text-center p-6">
+                            <h3 class="text-xl font-tan mb-2 text-customLight">Yllusion Panel</h3>
+                            <p class="text-sm font-tan text-customLight">French Server Roleplay on GTAV</p>
+                            <i class="fas fa-arrow-up-right mx-auto mt-4"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="w-full h-64 group overflow-hidden rounded-lg bg-[url(./learninglua.png)] bg-cover bg-center bg-no-repeat transform transition-transform duration-300 hover:scale-105">
+                    <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div class="text-white text-center p-6">
+                            <h3 class="text-xl font-tan mb-2 text-customLight">Learning Lua</h3>
+                            <p class="text-sm font-tan text-customLight">Website to learn Lua and many more languages</p>
+                            <i class="fas fa-arrow-up-right mx-auto mt-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desktop layout: overlapping cards -->
+            <div class="hidden md:block relative h-[500px]">
                 <!-- Card 1 (En haut à gauche) -->
                 <div class="absolute top-0 left-0 w-2/3 min-h-[300px] group overflow-hidden rounded-lg bg-[url(./yllusion2.png)] bg-cover bg-center bg-no-repeat transform transition-transform duration-300 hover:scale-105 z-10">
                     <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <div class="text-white text-center p-6">
                             <h3 class="text-xl font-tan mb-2 text-customLight">Yllusion Panel</h3>
                             <p class="text-sm font-tan text-customLight">French Server Roleplay on GTAV</p>
-                            <i data-feather="arrow-up-right" class="mx-auto mt-4"></i>
+                            <i class="fas fa-arrow-up-right mx-auto mt-4"></i>
                         </div>
                     </div>
                 </div>
@@ -105,27 +153,54 @@
                         <div class="text-white text-center p-6">
                             <h3 class="text-xl font-tan mb-2 text-customLight">Learning Lua</h3>
                             <p class="text-sm font-tan text-customLight">Website to learn Lua and many more languages</p>
-                            <i data-feather="arrow-up-right" class="mx-auto mt-4"></i>
+                            <i class="fas fa-arrow-up-right mx-auto mt-4"></i>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-                
     </section>
    
-<!-- Other Section (Inversée) -->
-    <section id="other" class="min-h-screen bg-customDark p-12">
+    <!-- Other Section -->
+    <section id="other" class="min-h-screen bg-customDark p-6 md:p-12">
         <div class="max-w-6xl mx-auto">
-            <h2 class="text-5xl font-tan text-white mb-12 flex justify-center pt-6 pb-6">OTHER</h2>
-            <div class="relative h-[500px]"> <!-- Conteneur relatif pour positionner les cartes -->
+            <h2 class="text-4xl md:text-5xl font-tan text-white mb-8 md:mb-12 text-center pt-6 pb-6">OTHER</h2>
+            
+            <!-- Mobile layout: stacked cards -->
+            <div class="md:hidden space-y-6">
+                <!-- Other Card 1 -->
+                <div class="w-full h-64 group overflow-hidden rounded-lg bg-[url(./payroll.jpg)] bg-cover bg-center bg-no-repeat transform transition-transform duration-300 hover:scale-105">
+                    <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div class="text-white text-center p-6">
+                            <h3 class="text-xl font-tan mb-2">Work-study payroll management</h3>
+                            <p class="text-sm font-tan">Professional experience</p>
+                            <i class="fas fa-arrow-up-right mx-auto mt-4"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Other Card 2 -->
+                <div class="w-full h-64 group overflow-hidden rounded-lg bg-[url(./Kaizen-Inoxtag.webp)] bg-cover bg-center bg-no-repeat transform transition-transform duration-300 hover:scale-105">
+                    <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <div class="text-white text-center p-6">
+                            <h3 class="text-xl font-tan mb-2">Inoxtag Live Moderator</h3>
+                            <p class="text-sm">Professional experience</p>
+                            <p class="text-sm font-tan">2022-2024</p>
+                            <i class="fas fa-arrow-up-right mx-auto mt-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desktop layout: overlapping cards -->
+            <div class="hidden md:block relative h-[500px]">
                 <!-- Other Card 1 (En haut à droite) -->
                 <div class="absolute top-0 right-0 w-2/3 min-h-[300px] group overflow-hidden rounded-lg bg-[url(./payroll.jpg)] bg-cover bg-center bg-no-repeat transform transition-transform duration-300 hover:scale-105 z-10">
                     <div class="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <div class="text-white text-center p-6">
                             <h3 class="text-xl font-tan mb-2">Work-study payroll management</h3>
                             <p class="text-sm font-tan">Professional experience</p>
-                            <i data-feather="arrow-up-right" class="mx-auto mt-4"></i>
+                            <i class="fas fa-arrow-up-right mx-auto mt-4"></i>
                         </div>
                     </div>
                 </div>
@@ -137,7 +212,7 @@
                             <h3 class="text-xl font-tan mb-2">Inoxtag Live Moderator</h3>
                             <p class="text-sm">Professional experience</p>
                             <p class="text-sm font-tan">2022-2024</p>
-                            <i data-feather="arrow-up-right" class="mx-auto mt-4"></i>
+                            <i class="fas fa-arrow-up-right mx-auto mt-4"></i>
                         </div>
                     </div>
                 </div>
@@ -147,25 +222,25 @@
 
     <!-- Contact Section -->
     <section id="contact" class="h-screen flex items-center justify-center bg-[url(./login.jpg)] bg-cover bg-center bg-no-repeat">
-        <div class="text-center">
-            <h2 class="text-5xl font-tan text-white mb-12">GET IN TOUCH</h2>
+        <div class="text-center px-4">
+            <h2 class="text-4xl md:text-5xl font-tan text-white mb-8 md:mb-12">GET IN TOUCH</h2>
             <!-- Bouton pour ouvrir la modale -->
-            <button onclick="openModal()" class="px-8 py-4 bg-customDark text-black font-tan rounded-full hover:bg-customWhite transition-colors">
+            <button onclick="openModal()" class="px-6 py-3 md:px-8 md:py-4 bg-customDark text-black font-tan rounded-full hover:bg-customWhite transition-colors">
                 Contact Me
             </button>
         </div>
     
         <!-- Fenêtre modale -->
-        <div id="modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-            <div class="bg-customWhite p-14 rounded-lg shadow-lg text-center">
-                <div class="flex justify-center gap-10">
+        <div id="modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-customWhite p-8 md:p-14 rounded-lg shadow-lg text-center w-full max-w-md">
+                <div class="flex justify-center gap-8 md:gap-10">
                     <!-- Bouton LinkedIn -->
                     <a href="https://www.linkedin.com/in/laetitiadoss" target="_blank" class="hover:scale-110 transition-transform">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="w-14 h-14">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="w-12 h-12 md:w-14 md:h-14">
                     </a>
                     <!-- Bouton Discord -->
                     <a href="https://discord.gg/XDExmbcpkT" target="_blank" class="hover:scale-110 transition-transform">
-                        <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord" class="w-16 h-14">
+                        <img src="https://assets-global.website-files.com/6257adef93867e50d84d30e2/636e0a6a49cf127bf92de1e2_icon_clyde_blurple_RGB.png" alt="Discord" class="w-14 h-12 md:w-16 md:h-14">
                     </a>
                 </div>
                 <!-- Bouton pour fermer la modale -->
@@ -176,36 +251,49 @@
         </div>
     </section>
     
-    <!-- Script JavaScript pour gérer la modale -->
+    <!-- Scripts -->
     <script>
-         // Fonction pour ouvrir la modale
- function openModal() {
-    document.getElementById('modal').classList.remove('hidden');
-}
-
-// Fonction pour fermer la modale
-function closeModal() {
-    document.getElementById('modal').classList.add('hidden');
-}
+        // Navbar scroll behavior
+        let prevScrollpos = window.pageYOffset;
+        
+        window.onscroll = function() {
+            let currentScrollPos = window.pageYOffset;
+            
+            if (prevScrollpos > currentScrollPos) {
+                document.querySelector('nav').classList.remove('hidden-navbar');
+            } else {
+                document.querySelector('nav').classList.add('hidden-navbar');
+            }
+            
+            prevScrollpos = currentScrollPos;
+        };
+        
+        // Mobile menu functionality
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenuBtn = document.getElementById('closeMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuBtn.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+        });
+        
+        closeMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+        });
+        
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+        }
+        
+        // Modal functionality <3
+        function openModal() {
+            document.getElementById('modal').classList.remove('hidden');
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
     </script>
-    <script>
-        let prevScrollpos = window.pageYOffset; // position initiale du défilement
-
-window.onscroll = function() {
-    let currentScrollPos = window.pageYOffset;
-
-    // Si l'utilisateur défile vers le bas, cache la navbar
-    if (prevScrollpos > currentScrollPos) {
-        document.querySelector('nav').classList.remove('hidden-navbar');
-    } else {
-        document.querySelector('nav').classList.add('hidden-navbar');
-    }
-
-    // Met à jour la position précédente
-    prevScrollpos = currentScrollPos;
-};
-    </script>
-
-    
 </body>
 </html>
+
